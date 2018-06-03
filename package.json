@@ -1,0 +1,21 @@
+{
+  "name": "studyapi",
+  "version": "1.0.0",
+  "description": "API para o studyja, contendo os resumos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "resumos",
+    "Study"
+  ],
+  "author": "Vinicius Komninakis",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "consign": "^0.1.6",
+    "express": "^4.16.3",
+    "nodemon": "^1.17.5"
+  }
+}
