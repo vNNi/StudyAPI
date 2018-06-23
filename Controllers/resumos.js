@@ -11,6 +11,14 @@ module.exports=function(app){
         resumo.status="Criado";
         resumo.data= new Date;
 
-        res.send(resumo); 
+        var connection = app.persistencia.connectionFactory();
+        var resumoDao = new app.persistencia.ResumosDao(connection);
+
+        resumosDao.salva(resumo,function(error,resultado){
+            console.log('resumo criado');
+            res.json(resultado); 
+        });
+
+        
     });
 }
