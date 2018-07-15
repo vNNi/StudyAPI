@@ -1,11 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const autoLoad = require('express-load');
+var consign = require('consign');
 
 //exportando objeto express e incluindo pasta Controllers, com as rotas
 // ou endpoints dentro do objeto express
-
-
 module.exports = function(){
     const app = express();
     console.log("objeto express iniciado com sucesso");
@@ -15,7 +14,10 @@ module.exports = function(){
 
     //lib consign faz com que incluimos uma pasta e seus conteudos
     //dentro de um objeto
-
-    autoLoad('Controllers', {cwd:""}).then('persistencia').into(app);
+    consign()
+    .include('Controllers')
+        .then('persistencia')
+            .into(app);
+    // autoLoad('Controllers').then('persistencia').into(app);
     return app;
 }

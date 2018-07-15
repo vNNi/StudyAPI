@@ -1,10 +1,15 @@
-function Resumos(connection){
-    this._connection= connection;
-}
+ function Resumos(connection){
+        this._connection= connection;
+    }
+    
+        Resumos.prototype.salva= function (resumo, callback) {
+            this._connection.query('INSERT INTO resumos set ?',resumo);
+        }
+        Resumos.prototype.lista= function(callback){
+            this._connection.query('select * from usuarios', callback);
+    }
 
-Resumos.prototype.salva= function (resumo, callback) {
-    this._connection.query('INSERT INTO resumos set ?',resumo);
-}
-Resumos.prototype.lista= function(resumo,callback){
-    this._connection.query('select * from resumos', callback);
-}
+    module.exports = function(){
+        return Resumos;
+    }
+
