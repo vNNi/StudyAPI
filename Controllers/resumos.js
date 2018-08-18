@@ -4,10 +4,12 @@ module.exports=function(app){
      connection.connect();
      var resumosDao = new app.persistencia.ResumosDao(connection);
       resumosDao.lista((err,resultado) => {
-        if (!err)
+        if (!err){
+            res.status(200);
             res.json(resultado);
+        }
         else
-            console.log('Error while performing Query.');
+            console.log('Error while performing Query.' + err);
       });        
       connection.end();
     });
@@ -28,11 +30,12 @@ module.exports=function(app){
         resumosDao.salva(resumo,function(error,resultado){
            if(!error){
             console.log('resumo criado');
-            res.json(resultado);  
+            res.status(200).json(resultado);  
            } 
            else
                 console.log("error performing POST");
         });
+        connection.end();
     });
     app.get('/resumos/resumo/:id',(req,res) => {
         const id = req.params.id;
@@ -65,5 +68,20 @@ module.exports=function(app){
         });
         connection.end();
     });
+    app.patch('/resumos/resumo/:id',(req,res,next)=>{
+        const id= req.params.id;
+        let validatorId = req.assert('id','id é obrigatório').notEmpty();
+        let errors = req.validationErrors();
+        if(errors){
+            res.json(errors);
+            res.status(422)
+            return;
+        }
+        var connection = app.persistencia.connectionFactory();
+        var resumosDao = new app.persistencia.ResumosDao(connection);
 
+        resumosDao.editar(id,(erros,callback)=>{
+            
+        });
+    });
 }
