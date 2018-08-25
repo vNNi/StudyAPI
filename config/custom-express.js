@@ -21,22 +21,21 @@ module.exports = function(){
         next();
     });
     //criando error log para requisições erradas e/ou não encontradas;
-    app.use((req,res,next) => {
-        const error = new Error('EndPoint não existente/encontrado');
-        error.status= 404;
-        next(error);
-    });
-    //passando error para o client da API
-    app.use((error,req,res,next)=>{
-        res.status(error.status || 500);
-        res.json({
-            error:{
-                message: error.message
-            }
-        })
-    })
-    // app.use(middlewares);
-
+    // app.use((req,res,next) => {
+    //     const error = new Error('EndPoint não existente/encontrado');
+    //     error.status= 404;
+    //     next(error);
+    // });
+    // //passando error para o client da API
+    // app.use((error,req,res,next)=>{
+    //     console.log("entrei aqui");
+    //     res.json({
+    //         error:{
+    //             message: error.message
+    //         }
+    //     })
+    //     next();
+    // })
     //lib consign faz com que incluimos uma pasta e seus conteudos
     //dentro de um objeto
     consign()

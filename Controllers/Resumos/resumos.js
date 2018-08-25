@@ -5,7 +5,7 @@ module.exports=function(app){
      var resumosDao = new app.persistencia.ResumosDao(connection);
       resumosDao.lista((err,resultado) => {
         if (!err){
-            res.status(200);
+            console.log("aqui estou eu");
             res.json(resultado);
         }
         else
@@ -14,7 +14,7 @@ module.exports=function(app){
       connection.end();
     });
     app.post('/resumos/resumo', (req, res) => {
-        var resumo = req.body;
+        const resumo = req.body;
         var validatorTitulo = req.assert('titulo', 'Titulo é obrigatório').notEmpty();
         var erros = req.validationErrors();
         if(erros){
@@ -33,7 +33,7 @@ module.exports=function(app){
             res.status(200).json(resultado);  
            } 
            else
-                console.log("error performing POST");
+                console.log("error performing POST" + error);
         });
         connection.end();
     });
@@ -79,7 +79,6 @@ module.exports=function(app){
         }
         var connection = app.persistencia.connectionFactory();
         var resumosDao = new app.persistencia.ResumosDao(connection);
-
         resumosDao.editar(id,(erros,callback)=>{
             
         });
