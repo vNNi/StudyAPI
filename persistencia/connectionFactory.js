@@ -4,8 +4,8 @@ function createDBConnection(){
     return mysql.createConnection({
         host: process.env.Host,
         port: process.env.Port,
-        user: 'root',
-        database:'stddb',
+        user: 'study',
+        database:'studyja',
         password: process.env.Password
     });
 }
