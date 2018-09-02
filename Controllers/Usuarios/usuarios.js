@@ -30,27 +30,35 @@ module.exports=(app)=>{
                 connection.end();
             });
     });
-    app.post("/usuarios/login",(req,res)=>{
-        let email = req.body.email;
-        let senha = req.body.senha;
-        let hash;
+    app.post("/usuarios/login",(req,res,next)=>{
+        let email = req.body.usu_email;
+        let senha = req.body.usu_senha;
         let connection = app.persistencia.connectionFactory();
         connection.connect();
-        let usuariosDAO = new app.persistencia.usuariosDAO(connection);
+        let usuariosDAO = new app.persistencia.UsuariosDAO(connection);
         usuariosDAO.getHash(email,(err,resultado)=>{
-            if(!err || resultado.length >=1 ) hash=resultado.usu_senha;
-            else { res.status(404).json({
-                messageUsu: "usuario não encontrado",
-                messageDev :err
-            });
-            return;
+            if(!err){ 
+                let hash = resultado[0].usu_senha;
+                console.log(senha + " " +hash);
+                let validate = bcrypt.compareSync(senha,hash);
+                if(!validate){
+                    res.status(401).json({
+                        message: "Auth Failed"
+                    });  
+                }if(validate){
+                    res.status(200).json({
+                        message:"Auth sucessful"
+                    })
+                }
             }
-        });
-        let validate = bcrypt.compareSync(senha,hash);
-        if(validate){
-            res.status(200);
-            //retornar JWT;
-        }
+            else { 
+               res.json({
+                    messageDev:err,
+                    message: "Auth Failed"
+               });
+            }   
+            });
+     
     });
     app.delete("/usuarios/:id",(req,res,next)=>{
         let id = req.params.id;
