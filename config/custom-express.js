@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const autoLoad = require('express-load');
-var consign = require('consign');
-var validator = require('express-validator');
+const consign = require('consign');
+const validator = require('express-validator');
 const middlewares = require('../Middlewares/Middlewares');
 
 //exportando objeto express e incluindo pasta Controllers, com as rotas

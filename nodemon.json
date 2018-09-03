@@ -2,6 +2,7 @@
     "env":{
         "Host":"mysql556.umbler.com",
         "Port": "41890",
-        "Password":"HjyyvsJLU3"
+        "Password":"HjyyvsJLU3",
+        "xapi":"secret"
     }
 }

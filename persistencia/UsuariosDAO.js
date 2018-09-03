@@ -6,7 +6,7 @@ Usuarios.prototype.salvar=function(usuario,callback){
     this._connection.query("insert into usuario set ?",usuario,callback);
 }
 Usuarios.prototype.getHash=function(email,callback){
-    this._connection.query("select usu_senha from usuario where usu_email = ?",email,callback);
+    this._connection.query("select usu_senha,usu_id from usuario where usu_email = ?",email,callback);
 }
 Usuarios.prototype.verificar=function(email,senha,callback){
     this._connection.query("select * from usuario where email = ? AND senha = ?",[email,senha],callback);

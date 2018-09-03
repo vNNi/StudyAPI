@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 module.exports=(app)=>{
     app.post("/usuarios/cadastro", (req,res) =>{ 
        const usuario = req.body;
@@ -39,15 +40,25 @@ module.exports=(app)=>{
         usuariosDAO.getHash(email,(err,resultado)=>{
             if(!err){ 
                 let hash = resultado[0].usu_senha;
-                console.log(senha + " " +hash);
+                console.log(resultado);
                 let validate = bcrypt.compareSync(senha,hash);
                 if(!validate){
                     res.status(401).json({
                         message: "Auth Failed"
                     });  
                 }if(validate){
+                    const token =jwt.sign({
+                        email: email,
+                        userId : resultado[0].usu_id
+                    },
+                    "HJGLSFK20@255D",
+                    {
+                        expiresIn: "1h"
+                    }
+                );
                     res.status(200).json({
-                        message:"Auth sucessful"
+                        message:"Auth sucessful",
+                        token: token
                     })
                 }
             }
