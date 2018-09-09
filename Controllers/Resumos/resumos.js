@@ -1,5 +1,8 @@
+const ApiAuth = require('../../Middlewares/Api-auth');
+const TokenAuth = require('../../Middlewares/Token-auth');
+
 module.exports=function(app){
-    app.get('/resumos', (req,res) => {
+    app.get('/resumos',ApiAuth,(req,res) => {
      var connection = app.persistencia.connectionFactory();
      connection.connect();
      var resumosDao = new app.persistencia.ResumosDao(connection);
@@ -13,7 +16,7 @@ module.exports=function(app){
       });        
       connection.end();
     });
-    app.post('/resumos/resumo', (req, res) => {
+    app.post('/resumos/resumo', ApiAuth,TokenAuth,(req, res) => {
         const resumo = req.body;
         var validatorTitulo = req.assert('titulo', 'Titulo é obrigatório').notEmpty();
         var erros = req.validationErrors();
@@ -37,7 +40,7 @@ module.exports=function(app){
         });
         connection.end();
     });
-    app.get('/resumos/resumo/:id',(req,res) => {
+    app.get('/resumos/resumo/:id',ApiAuth,(req,res) => {
         const id = req.params.id;
         let validatorId = req.assert('id', 'id é obrigatório').notEmpty();
         let erros = req.validationErrors();
@@ -68,7 +71,7 @@ module.exports=function(app){
         });
         connection.end();
     });
-    app.patch('/resumos/resumo/:id',(req,res,next)=>{
+    app.patch('/resumos/resumo/:id',ApiAuth,(req,res,next)=>{
         const id= req.params.id;
         let validatorId = req.assert('id','id é obrigatório').notEmpty();
         let errors = req.validationErrors();

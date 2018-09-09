@@ -3,6 +3,7 @@
         "Host":"mysql556.umbler.com",
         "Port": "41890",
         "Password":"HjyyvsJLU3",
-        "xapi":"secret"
+        "xapi":"secret",
+        "apiToken":"XjpcXLgDcrXwgNXue6HDjQfBrDC2Lqm8QbsjPaAMfkG5yfNNyxeP7mVt"
     }
 }
