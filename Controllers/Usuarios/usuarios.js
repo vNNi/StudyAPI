@@ -9,6 +9,7 @@ module.exports=(app)=>{
             let usuariosDAO = new app.persistencia.UsuariosDAO(connection);
             let salt = bcrypt.genSaltSync(5);
             let hash = bcrypt.hashSync(req.body.usu_senha,salt);
+            console.log(hash);
             usuario.usu_senha = hash;
             usuariosDAO.salvar(usuario,function(err,resultado){
                 if(!err){

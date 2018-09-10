@@ -1,6 +1,6 @@
 const ApiAuth = require('../../Middlewares/Api-auth');
 const TokenAuth = require('../../Middlewares/Token-auth');
-
+const AdminAuth = require('../../Middlewares/AdminToken-auth');
 module.exports=function(app){
     app.get('/resumos',ApiAuth,(req,res) => {
      var connection = app.persistencia.connectionFactory();
@@ -71,7 +71,7 @@ module.exports=function(app){
         });
         connection.end();
     });
-    app.patch('/resumos/resumo/:id',ApiAuth,(req,res,next)=>{
+    app.patch('/resumos/resumo/:id',ApiAuth,AdminAuth,(req,res,next)=>{
         const id= req.params.id;
         let validatorId = req.assert('id','id é obrigatório').notEmpty();
         let errors = req.validationErrors();
