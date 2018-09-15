@@ -2,11 +2,11 @@ const ApiAuth = require('../../Middlewares/Api-auth');
 const TokenAuth = require('../../Middlewares/Token-auth');
 const AdminAuth = require('../../Middlewares/AdminToken-auth');
 module.exports=function(app){
-    app.get('/resumos',ApiAuth,(req,res) => {
+    app.get('/resumos/livros',ApiAuth,(req,res) => {
      var connection = app.persistencia.connectionFactory();
      connection.connect();
      var resumosDao = new app.persistencia.ResumosDao(connection);
-      resumosDao.lista((err,resultado) => {
+      resumosDao.listaResumosLivro((err,resultado) => {
         if (!err){
             console.log("aqui estou eu");
             res.json(resultado);
@@ -16,6 +16,21 @@ module.exports=function(app){
       });        
       connection.end();
     });
+    app.get('/resumos/artigos',ApiAuth,(req,res) => {
+        var connection = app.persistencia.connectionFactory();
+        connection.connect();
+        var resumosDao = new app.persistencia.ResumosDao(connection);
+         resumosDao.listaResumosArtigo((err,resultado) => {
+           if (!err){
+               console.log("aqui estou eu");
+               res.json(resultado);
+           }
+           else
+               console.log('Error while performing Query.' + err);
+         });        
+         connection.end();
+       });
+    
     app.post('/resumos/resumo', ApiAuth,TokenAuth,(req, res) => {
         const resumo = req.body;
         var validatorTitulo = req.assert('titulo', 'Titulo é obrigatório').notEmpty();
@@ -30,7 +45,7 @@ module.exports=function(app){
         var connection = app.persistencia.connectionFactory();
         var resumosDao = new app.persistencia.ResumosDao(connection);
 
-        resumosDao.salva(resumo,function(error,resultado){
+        resumosDao.salvaResumoLivro(resumo,function(error,resultado){
            if(!error){
             console.log('resumo criado');
             res.status(200).json(resultado);  
@@ -83,7 +98,45 @@ module.exports=function(app){
         var connection = app.persistencia.connectionFactory();
         var resumosDao = new app.persistencia.ResumosDao(connection);
         resumosDao.editar(id,(erros,callback)=>{
-            
+            if(!erros){
+                res.status(200).json({
+                    Mensagem: "Resumo aprovado com sucesso",
+                    resultado:callback
+                });
+            }
+            else{
+                res.status(400).json({
+                    Mensagem: "Não foi possível aprovar este resumo",
+                    error: erros
+                });
+            }
+        });
+    });
+    app.get('/resumos/categorias',ApiAuth,(req,res,next)=>{
+        let connection = app.persistencia.connectionFactory();
+        var resumosDao = new app.persistencia.ResumosDao(connection);
+        resumosDao.listaCategorias((err,resultado)=>{
+            if(!err){
+                res.status(200).json({
+                    resultado:resultado
+                })
+            }else{
+                res.status(400).json({
+                    error:err
+                })
+            }
+        });
+    });
+    app.get('/resumos/categoria/:id',ApiAuth,(req,res,next)=>{
+        let id = req.params.id
+        let connection = app.persistencia.connectionFactory();
+        var resumosDao = new app.persistencia.ResumosDao(connection);
+        resumosDao.resumosLivroCategoria(id,(err,resultado)=>{
+            if(!err){
+                res.status(200).json({
+                    Resumos: resultado
+                });
+            }
         });
     });
 }
