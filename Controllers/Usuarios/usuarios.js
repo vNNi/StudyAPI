@@ -97,4 +97,22 @@ module.exports=(app)=>{
             }
         });
     });
+    app.get("/usuario/:id",(req,res,next)=>{
+        let id=req.params.id;
+        let connection = app.persistencia.connectionFactory();
+        connection.connect();
+        let usuariossDAO = new app.persistencia.UsuariosDAO(connection);
+        usuariossDAO.getUserInfo(id,(err,resultado)=>{
+            if(!err){
+                res.status(200).json({
+                    resultado:resultado
+                });
+            }else{
+                res.status(400).json({
+                    MensagemDev:err,
+                    mensagem: "usuário inexistente"
+                });
+            }
+        });
+    });
 }
