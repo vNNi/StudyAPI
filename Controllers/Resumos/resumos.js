@@ -139,4 +139,87 @@ module.exports=function(app){
             }
         });
     });
+    app.post('/resumos/resumo/avaliar',ApiAuth,TokenAuth,(req,res,next)=>{
+        let info = req.body;
+        let connection = app.persistencia.connectionFactory();
+        var resumosDao = new app.persistencia.ResumosDao(connection);
+        resumosDao.resumosAvaliacao(info,(err,resultado)=>{
+            if(!err){
+                res.status(200).json({
+                    Mensagem: "Resumo Avaliado com sucesso!"
+                });
+            }else{
+                res.status(400).json({
+                    Mensagem:"Não foi possível avaliar este resumo",
+                    error:err
+                });
+            }
+        });
+    });
+    app.get('/resumos/resumo/avaliado/:id',(req,res,next)=>{
+        let id = req.params.id;
+        let connection= app.persistencia.connectionFactory();
+        let resumosDao= new app.persistencia.ResumosDao(connection);
+
+        resumosDao.getAvaliacao(id,(err,resultado)=>{
+            if(!err){
+                let avaliacoes=0;
+                console.log(resultado.length);
+                for(let i=0;i<resultado.length;i++){
+                   let numeros=(parseInt(resultado[i].est_valor));
+                   avaliacoes+=numeros;
+                   console.log(avaliacoes);
+                }
+                let mediaAvaliacoes=avaliacoes/resultado.length;
+                res.status(200).json({
+                    resultado:mediaAvaliacoes
+                });
+            }else{
+                res.status(400).json({
+                    mensagem:"Não foi possível avaliar este resumo",
+                    error:err
+                })
+            }
+        });
+    });
+    app.post('/resumos/resumo/comentar',ApiAuth,TokenAuth,(req,res,next)=>{
+        let tra_id= req.body.comnt_tra_id;
+        let usu_id= req.body.comnt_usu_id;
+        let coment= req.body.comnt_comentario;
+
+        let connection= app.persistencia.connectionFactory();
+        connection.connect();
+        let resumosDao= new app.persistencia.ResumosDao(connection);
+        resumosDao.newComent(usu_id,tra_id,coment,(err,resultado)=>{
+            if(!err){
+                res.status(200).json({
+                    Mensagem:"Comentário feito com sucesso!",
+                    resultado:resultado
+                });
+            }else{
+                res.status(400).json({
+                    Mensagem: "Não possível efetuar o comentário",
+                    error:err
+                });
+            }
+        });
+    });
+    app.get('/resumos/resumo/comentarios/:id',(req,res,nexte)=>{
+        let trab_id = req.params.id;
+
+        let connect = app.persistencia.connectionFactory();
+        let resumosDao = new app.persistencia.ResumosDao(connect);
+        resumosDao.getComent(trab_id,(err,resultado)=>{
+            if(!err){
+                res.status(200).json({
+                    comentarios:resultado
+                });
+            }else{
+                res.status(400).json({
+                    Mensagem: "Não foi possível carregar os comentários",
+                    error:err
+                });
+            }
+        });
+    });
 }
