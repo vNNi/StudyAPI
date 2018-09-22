@@ -2,6 +2,9 @@ const ApiAuth = require('../../Middlewares/Api-auth');
 const TokenAuth = require('../../Middlewares/Token-auth');
 const AdminAuth = require('../../Middlewares/AdminToken-auth');
 module.exports=function(app){
+    app.get('/',(req,res,next)=>{
+        res.send('hello World');
+    });
     app.get('/resumos/livros',ApiAuth,(req,res) => {
      var connection = app.persistencia.connectionFactory();
      connection.connect();
