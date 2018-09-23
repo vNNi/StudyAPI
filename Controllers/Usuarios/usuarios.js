@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto= require('crypto');
 const ApiAuth = require('../../Middlewares/Api-auth');
 module.exports=(app)=>{
     app.post("/usuarios/cadastro", ApiAuth,(req,res) =>{ 
@@ -7,8 +7,9 @@ module.exports=(app)=>{
             let connection = app.persistencia.connectionFactory();
             connection.connect();
             let usuariosDAO = new app.persistencia.UsuariosDAO(connection);
-            let salt = bcrypt.genSaltSync(5);
-            let hash = bcrypt.hashSync(req.body.usu_senha,salt);
+            let mykey= crypto.createCipher('aes192','teste');
+            let hash= mykey.update(req.body.usu_senha,'utf8','hex');
+            hash+= mykey.final('hex');
             console.log(hash);
             usuario.usu_senha = hash;
             usuariosDAO.salvar(usuario,function(err,resultado){
@@ -36,6 +37,7 @@ module.exports=(app)=>{
     app.post("/usuarios/login",ApiAuth,(req,res,next)=>{
         let email = req.body.usu_email;
         let senha = req.body.usu_senha;
+        let validate = false;
         let connection = app.persistencia.connectionFactory();
         connection.connect();
         let usuariosDAO = new app.persistencia.UsuariosDAO(connection);
@@ -43,7 +45,11 @@ module.exports=(app)=>{
             if(!err){ 
                 let hash = resultado[0].usu_senha;
                 console.log(resultado);
-                let validate = bcrypt.compareSync(senha,hash);
+                let decipher = crypto.createDecipher('aes192','teste');
+                console.log(decipher);
+                let dec = decipher.update(hash,'hex','utf8');
+                dec+= decipher.final('utf8');
+                validate = senha==dec?true:false;
                 if(!validate){
                     res.status(401).json({
                         message: "Auth Failed"
