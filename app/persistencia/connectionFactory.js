@@ -2,11 +2,11 @@ var mysql = require('mysql');
 
 function createDBConnection(){
     return mysql.createConnection({
-        host: process.env.Host,
-        port: process.env.Port,
+        host: "mysql556.umbler.com",
+        port: "41890",
         user: 'study',
         database:'studyja',
-        password: process.env.Password
+        password: "HjyyvsJLU3"
     });
 }
 console.log("Conexão ligada" + createDBConnection());
