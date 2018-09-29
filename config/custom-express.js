@@ -36,7 +36,7 @@ module.exports = function(){
     // })
     //lib consign faz com que incluimos uma pasta e seus conteudos
     //dentro de um objeto
-    consign()
+    consign({cwd: process.cwd()+"/app"})
     .include('Controllers')
         .then('persistencia')
             .into(app);
