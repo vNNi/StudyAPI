@@ -1,6 +1,7 @@
 var app = require('./config/custom-express')();
-app.listen(process.env.PORT || 3000,function(){
-    console.log('Servidor ligado');
+var port = process.env.PORT || 3000;
+app.listen(port,function(){
+    console.log('Servidor ligado na porta '+ port);
 }); 
 
 
