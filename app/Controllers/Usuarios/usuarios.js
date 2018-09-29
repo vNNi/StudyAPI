@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto= require('crypto');
-const ApiAuth = require('../../Middlewares/Api-auth');
+const ApiAuth = require('../../../Middlewares/Api-auth');
 module.exports=(app)=>{
     app.post("/usuarios/cadastro", ApiAuth,(req,res) =>{ 
        const usuario = req.body;

@@ -1,5 +1,5 @@
-const AdminAuth= require("../../Middlewares/AdminToken-auth");
-const ApiAuth = require('../../Middlewares/Api-auth');
+const AdminAuth= require("../../../Middlewares/AdminToken-auth");
+const ApiAuth = require('../../../Middlewares/Api-auth');
 module.exports=function(app){
     app.get('/resumos/resumosPendentes',ApiAuth,AdminAuth,(req,res) => {
         let connection = app.persistencia.connectionFactory();
